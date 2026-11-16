@@ -48,4 +48,9 @@ public class TestController {
             @RequestParam(value = "size", defaultValue = "2") Integer size) {
         return userService.getUserByPage(page, size);
     }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable("id") Integer id) {
+        return userService.getUserById(id);
+    }
 }

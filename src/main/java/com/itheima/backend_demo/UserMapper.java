@@ -32,4 +32,7 @@ public interface UserMapper {
     // 分页查询：从 offset 开始，查 size 条数据
     @Select("SELECT * FROM user LIMIT #{offset}, #{size}")
     List<User> findByPage(@Param("offset") Integer offset, @Param("size") Integer size);
+
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    User getUserById(Integer id);
 }

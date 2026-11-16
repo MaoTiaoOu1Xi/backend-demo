@@ -10,4 +10,5 @@ public interface UserService {
     void deleteUser(Integer id);
     List<User> findAllWithDept();
     List<User> getUserByPage(Integer pageNum, Integer pageSize);
+    User getUserById(Integer id);
 }

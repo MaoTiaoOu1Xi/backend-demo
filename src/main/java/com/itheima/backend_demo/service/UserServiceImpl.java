@@ -3,6 +3,7 @@ package com.itheima.backend_demo.service;
 import com.itheima.backend_demo.User;
 import com.itheima.backend_demo.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,5 +47,12 @@ public class UserServiceImpl implements UserService {
         // 公式：起始索引 = (当前页码 - 1) * 每页条数
         int offset = (pageNum - 1) * pageSize;
         return userMapper.findByPage(offset, pageSize);
+    }
+
+    @Override
+    @Cacheable(value = "user", key = "#id") // <--- 核心！这就是我们加的缓存
+    public User getUserById(Integer id) {
+        System.out.println("====== 正在查询 MySQL 数据库 ======");
+        return userMapper.getUserById(id);
     }
 }
