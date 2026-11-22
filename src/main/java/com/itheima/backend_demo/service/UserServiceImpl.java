@@ -12,8 +12,13 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserMapper userMapper;
+    // 1. 把变量声明为 final
+    private final UserMapper userMapper;
+
+    // 2. 用构造方法把 Mapper 传进来（不需要写 @Autowired，Spring 会自动识别）
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public List<User> findAll() {
