@@ -3,6 +3,7 @@ package com.itheima.backend_demo.service;
 import com.itheima.backend_demo.User;
 import com.itheima.backend_demo.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "user", key = "#user.id") // 加上这个：更新用户时，删掉 Redis 里的旧缓存
     public void updateUser(User user) {
         userMapper.updateUser(user);
     }
 
     @Override
+    @CacheEvict(value = "user", key = "#id") // 加上这个：删除用户时，删掉 Redis 里的旧缓存
     public void deleteUser(Integer id) {
         userMapper.deleteUser(id);
     }
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "user", key = "#id") // <--- 核心！这就是我们加的缓存
+    @Cacheable(value = "user", key = "#id", unless = "#result == null") // 加上 unless，如果查出来是 null 就不存进缓存
     public User getUserById(Integer id) {
         System.out.println("====== 正在查询 MySQL 数据库 ======");
         return userMapper.getUserById(id);
