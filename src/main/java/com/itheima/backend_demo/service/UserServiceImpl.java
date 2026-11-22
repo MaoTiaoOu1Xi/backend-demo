@@ -47,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUserByPage(Integer pageNum, Integer pageSize) {
+        // 👇 加上这两行，如果前端传 0 或负数，强制变成 1
+        if (pageNum == null || pageNum < 1) pageNum = 1;
+        if (pageSize == null || pageSize < 1) pageSize = 2;
         // 公式：起始索引 = (当前页码 - 1) * 每页条数
         int offset = (pageNum - 1) * pageSize;
         return userMapper.findByPage(offset, pageSize);
